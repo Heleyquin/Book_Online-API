@@ -1,10 +1,12 @@
 package com.DocSach.Sach.Controller;
 
+import com.DocSach.Sach.DTO.CmtRequest;
 import com.DocSach.Sach.DTO.SachRequest;
 import com.DocSach.Sach.DTO.SachResponse;
 import com.DocSach.Sach.DTO.SachUpdate;
 import com.DocSach.Sach.Entity.*;
 import com.DocSach.Sach.Service.SachService;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -59,10 +61,18 @@ public class SachController {
     public ResponseEntity<?> getFile(@PathVariable("fileName") String fileName) {
         return sachService.getPdf(fileName);
     }
+    @GetMapping("file-mobie/{fileName}")
+    public ResponseEntity<?> getFileMobie(@PathVariable("fileName") String fileName){
+        return sachService.getPdfMobie(fileName);
+    }
 
     @GetMapping("/img/{fileName}")
     public ResponseEntity<?> getImg(@PathVariable("fileName") String fileName) {
         return sachService.getImg(fileName);
+    }
+    @GetMapping("/img-mobie/{fileName}")
+    public ResponseEntity<?> getImgToMobie(@PathVariable("fileName") String fileName) {
+        return sachService.getImgToMobie(fileName);
     }
     @PostMapping("/upload")
     public ResponseEntity<?> uploadImg(@RequestParam("file") MultipartFile file){
@@ -96,5 +106,17 @@ public class SachController {
     @GetMapping("/sach-lsd")
     public List<Sach_SLD> getSachFulCount(){
         return sachService.getSach_LSD();
+    }
+    @PostMapping("/cmt")
+    public ResponseEntity<?> addCmt(@RequestBody CmtRequest cmtRequest){
+        return sachService.addCmt(cmtRequest);
+    }
+    @GetMapping("/cmt/{id}")
+    public ResponseEntity<?> getCmt(@PathVariable("id") Long id){
+        return sachService.getCmts(id);
+    }
+    @GetMapping("rate/{id}")
+    public ResponseEntity<?> getRate(@PathVariable("id") Long id){
+        return sachService.getRates(id);
     }
 }

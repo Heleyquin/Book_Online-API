@@ -36,8 +36,4 @@ public class TacGia {
     @JsonIgnore
     private Set<Sach> sachListTG = new HashSet<>();
 
-//    public TacGia(Long id) {
-//        this.id = id;
-//    }
-
 }

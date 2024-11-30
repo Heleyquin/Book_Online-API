@@ -1,6 +1,7 @@
 package com.DocSach.Sach.Entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,11 +28,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Reader {
     @Id
     @Column(name = "Id_DocGia")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String ten;
     private String ho;
@@ -46,7 +48,6 @@ public class Reader {
     @OneToMany(mappedBy = "reader", cascade = CascadeType.MERGE)
     private Set<LichSuDoc> lichSuDocs = new HashSet<>();
 
-//    @ManyToMany(mappedBy = "favorList", cascade = CascadeType.ALL)
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "ct_favor",
@@ -54,6 +55,23 @@ public class Reader {
             inverseJoinColumns = @JoinColumn(name = "Id_Sach")
     )
     private Set<Sach> sachListFavor = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "readerDangKy",cascade = CascadeType.MERGE)
+    private Set<CT_Dang_Ky> ctGoiDangKySet = new HashSet<>();
+
+    @OneToMany(mappedBy = "readerWish",cascade = CascadeType.MERGE)
+    private Set<Sach_Mong_Muon> ctSachMongMuon = new HashSet<>();
+
+    @OneToMany(mappedBy = "readerBuy",cascade = CascadeType.MERGE)
+    private Set<LichSuMua> ctMuaSach = new HashSet<>();
+//
+//    @ManyToOne(cascade = CascadeType.MERGE)
+//    @JoinColumn(
+//            name = "Id_Mua",
+//            nullable = false
+//    )
+//    private LichSuMua lichSuMua;
 
     @OneToOne
     @JoinColumn(name = "TK")

@@ -1,8 +1,6 @@
 package com.DocSach.Sach.DTO;
 
-import com.DocSach.Sach.Entity.Account;
-import com.DocSach.Sach.Entity.LichSuDoc;
-import com.DocSach.Sach.Entity.Sach;
+import com.DocSach.Sach.Entity.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +23,9 @@ public class ReaderResponse {
     private String email;
     private Set<LichSuDoc> lichSuDocs;
     private Set<Sach> sachs;
+    private Set<CT_Dang_Ky> ctGoiDangKys;
     private Account idAccount;
+    private Set<LichSuMua> ctLichSuMua;
+    private Set<Sach_Mong_Muon> ctSachMongMuon;
 
 }

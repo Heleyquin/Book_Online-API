@@ -23,7 +23,6 @@ public class LichSuDocService {
         LichSuDoc lichSuDoc = lichSuDocResponsi.getReferenceById(id);
         return ResponseEntity.ok(LichSuDocResponse.builder()
                 .id(lichSuDoc.getId())
-                .daTra(lichSuDoc.getDaTra())
                 .sach(lichSuDoc.getSach())
                 .thoiGian(lichSuDoc.getThoiGian())
                 .idReader(lichSuDoc.getReader())
@@ -38,7 +37,6 @@ public class LichSuDocService {
         return LichSuDocResponse.builder()
                 .idReader(lichSuDoc.getReader())
                 .id(lichSuDoc.getId())
-                .daTra(lichSuDoc.getDaTra())
                 .sach(lichSuDoc.getSach())
                 .thoiGian(lichSuDoc.getThoiGian())
                 .build();
@@ -47,7 +45,6 @@ public class LichSuDocService {
         LichSuDoc lichSuDoc = LichSuDoc.builder()
                 .reader(lichSuDocRequest.getIdReader())
                 .sach(lichSuDocRequest.getSach())
-                .daTra(lichSuDocRequest.getDaTra())
                 .build();
         lichSuDocResponsi.save(lichSuDoc);
         return new ResponseEntity<>("Được rồi", HttpStatus.CREATED);
@@ -67,7 +64,6 @@ public class LichSuDocService {
         try {
             LichSuDoc lichSuDoc= lichSuDocResponsi.getReferenceById(lichSuDocResponse.getId());
             LichSuDoc lichSuDocMoi = LichSuDoc.builder()
-                    .daTra(lichSuDocResponse.getDaTra())
                     .id(lichSuDocResponse.getId())
                     .sach(lichSuDocResponse.getSach())
                     .thoiGian(lichSuDocResponse.getThoiGian())

@@ -27,7 +27,6 @@ public class LichSuDoc {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal daTra;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -37,7 +36,6 @@ public class LichSuDoc {
     )
     private Reader reader;
 
-//    @JsonIgnore
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(
             name = "Id_Sach",

@@ -13,4 +13,9 @@ public interface ReaderResponsive extends JpaRepository<Reader, Long> {
     Reader findByAccount(Account account);
 
     List<Reader> findByNgayTaoAfter(LocalDateTime ngayTao);
+
+    @Query(value = "EXEC sp_tong_tien_doc_gia :id", nativeQuery = true)
+    Double totalAmountAvailable(@Param("id") Long id);
+
+
 }

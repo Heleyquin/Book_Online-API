@@ -1,9 +1,6 @@
 package com.DocSach.Sach.DTO;
 
-import com.DocSach.Sach.Entity.QuanLy;
-import com.DocSach.Sach.Entity.Reader;
-import com.DocSach.Sach.Entity.TacGia;
-import com.DocSach.Sach.Entity.TheLoai;
+import com.DocSach.Sach.Entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +21,7 @@ public class SachResponse {
     private String urlImg;
     private String gioiThieu;
     private LocalDateTime ngayTao;
-    private LocalDateTime ngayCapNhat;
+    private LocalDateTime ngayUpdate;
     private LocalDateTime ngayRaMat;
     private BigDecimal giaTien;
     private String urlFile;
@@ -33,4 +30,5 @@ public class SachResponse {
     private Set<TheLoai> theLoaiSet;
     private Set<TacGia> tacGias;
     private Set<Reader> favors;
+    private Set<Cmt> cmts;
 }

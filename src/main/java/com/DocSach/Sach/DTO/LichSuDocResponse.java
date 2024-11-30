@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class LichSuDocResponse {
     private long id;
-    private BigDecimal daTra;
     private Reader idReader;
     private Sach sach;
     private LocalDateTime thoiGian;

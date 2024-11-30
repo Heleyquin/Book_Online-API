@@ -1,8 +1,7 @@
 package com.DocSach.Sach.DTO;
 
-import com.DocSach.Sach.Entity.Account;
-import com.DocSach.Sach.Entity.LichSuDoc;
-import com.DocSach.Sach.Entity.Sach;
+import com.DocSach.Sach.Embeddable.Key_CT_Goi_Dang_Ky;
+import com.DocSach.Sach.Entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,5 +23,8 @@ public class ReaderUpdate {
     private String email;
     private Set<Long> lichSuDocs;
     private Set<Long> sachs;
+    private Set<Key_CT_Goi_Dang_Ky> ctGoiDangKys;
     private Account idAccount;
+    private Set<Long> ctLichSuMua;
+    private Set<Long> ctSachMongMuon;
 }

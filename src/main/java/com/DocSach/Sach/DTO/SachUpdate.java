@@ -1,9 +1,6 @@
 package com.DocSach.Sach.DTO;
 
-import com.DocSach.Sach.Entity.QuanLy;
-import com.DocSach.Sach.Entity.Reader;
-import com.DocSach.Sach.Entity.TacGia;
-import com.DocSach.Sach.Entity.TheLoai;
+import com.DocSach.Sach.Entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +22,7 @@ public class SachUpdate {
     private String urlImg;
     private String gioiThieu;
     private String ngayTao;
-    private String ngayCapNhat;
+    private String ngayUpdate;
     private String ngayRaMat;
     private BigDecimal giaTien;
     private String urlFile;
@@ -34,4 +31,5 @@ public class SachUpdate {
     private Set<Long> theLoaiSet;
     private Set<Long> tacGias;
     private Set<Reader> favors;
+    private Set<Cmt> cmts;
 }

@@ -28,7 +28,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 //@RequiredArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, ignoreUnknown = true)
 public class Sach {
     @Id
     @Column(name = "Id_Sach")
@@ -81,8 +81,18 @@ public class Sach {
     )
     private Set<TacGia> tacGiaList = new HashSet<>();
 
+
     @JsonIgnore
     @ManyToMany(mappedBy = "sachListFavor", cascade = CascadeType.ALL)
     private Set<Reader> favorList = new HashSet<>();
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "sachCmt", cascade = CascadeType.MERGE)
+    private Set<Cmt> cmtSet = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "sach",cascade = CascadeType.MERGE)
+    private Set<CT_Goi> ctGoiSet = new HashSet<>();
 
 }

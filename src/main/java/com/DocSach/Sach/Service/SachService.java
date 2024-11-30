@@ -1,14 +1,16 @@
 package com.DocSach.Sach.Service;
 
-import com.DocSach.Sach.DTO.SachRequest;
-import com.DocSach.Sach.DTO.SachResponse;
-import com.DocSach.Sach.DTO.SachUpdate;
+import com.DocSach.Sach.DTO.*;
+import com.DocSach.Sach.Embeddable.Key_BinhLuan;
 import com.DocSach.Sach.Entity.*;
 import com.DocSach.Sach.Responsitory.*;
+import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,6 +45,8 @@ public class SachService {
     private final Top5Reponsi top5Reponsi;
     private final Top5MienPhiReponsi top5MienPhiReponsi;
     private final Sach_LSD_Responsive sachLsdResponsive;
+    private final CmtResponsi cmtResponsi;
+    private final DanhGiaResponsi danhGiaResponsi;
 
 
     public List<Top5MienPhi> getTop5MienPhi(){
@@ -63,7 +70,7 @@ public class SachService {
                 .id(sach.getId())
                 .nxb(sach.getNXB())
                 .ngayTao(sach.getNgayTao())
-                .ngayCapNhat(sach.getNgayUpdate())
+                .ngayUpdate(sach.getNgayUpdate())
                 .active(sach.isActive())
                 .urlImg(sach.getUrlImg())
                 .ngayRaMat(sach.getNgayRaMat())
@@ -74,6 +81,7 @@ public class SachService {
                 .tacGias(sach.getTacGiaList())
                 .theLoaiSet(sach.getTheLoaiList())
                 .favors(sach.getFavorList())
+                .cmts(sach.getCmtSet())
                 .build());
     }
 
@@ -88,7 +96,7 @@ public class SachService {
                 .id(sach.getId())
                 .nxb(sach.getNXB())
                 .ngayTao(sach.getNgayTao())
-                .ngayCapNhat(sach.getNgayUpdate())
+                .ngayUpdate(sach.getNgayUpdate())
                 .ngayRaMat(sach.getNgayRaMat())
                 .active(sach.isActive())
                 .urlImg(sach.getUrlImg())
@@ -98,6 +106,7 @@ public class SachService {
                 .idQuanLy(sach.getQuanLy())
                 .tacGias(sach.getTacGiaList())
                 .theLoaiSet(sach.getTheLoaiList())
+                .cmts(sach.getCmtSet())
                 .favors(sach.getFavorList())
                 .build();
     }
@@ -118,6 +127,7 @@ public class SachService {
                 .quanLy(sachRequest.getIdQuanLy())
                 .tacGiaList(convertToTacGiaEntities(sachRequest.getTacGias()))
                 .theLoaiList(convertToTheLoaiEntities(sachRequest.getTheLoaiSet()))
+                .cmtSet(convertToCmtEntities(sachRequest.getCmts()))
                 .favorList(convertToReaderEntities(sachRequest.getFavors()))
                 .build();
         sachResponsi.save(sach);
@@ -168,6 +178,15 @@ public class SachService {
         }
         return tacGiaSet;
     }
+
+    private Set<Cmt> convertToCmtEntities(Set<Key_BinhLuan> cmtIds) {
+        Set<Cmt> cmts = new HashSet<>();
+        for (Key_BinhLuan id : cmtIds) {
+            cmts.add(cmtResponsi.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy cmt")));
+        }
+        return cmts;
+    }
+
     private Set<Reader> convertToReaderEntities(Set<Long> readerIds) {
         Set<Reader> readerSet = new HashSet<>();
         for (Long id : readerIds) {
@@ -197,6 +216,7 @@ public class SachService {
                     .tacGiaList(convertToTacGiaEntities(sachsq.getTacGias()))
                     .theLoaiList(convertToTheLoaiEntities(sachsq.getTheLoaiSet()))
                     .favorList(convertToReaderEntities(sachsq.getFavors()))
+                    .cmtSet(convertToCmtEntities(sachsq.getCmts()))
                     .build();
             sachResponsi.save(sach);
             log.info("Đã thêm {}", sach.getTenSach());
@@ -227,6 +247,21 @@ public class SachService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    public ResponseEntity<?> getPdfMobie(String fileName){
+        try{
+            String filePath = "statics/" + fileName;
+            ClassPathResource resp = new ClassPathResource(filePath);
+            if(!resp.exists()){
+                return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
+            }
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resp.getFilename() + "\"")
+                    .body(new InputStreamResource(resp.getInputStream()));
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public ResponseEntity<?> getImg(String fileName){
         try{
@@ -243,15 +278,61 @@ public class SachService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    public ResponseEntity<?> getImgToMobie(String fileName){
+        try{
+            String filePath = "statics/" + fileName;
+            ClassPathResource resp = new ClassPathResource(filePath);
+            if(!resp.exists()){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(resp);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     public List<Sach_SLD> getSach_LSD(){
         List<Sach_SLD> s = sachLsdResponsive.findAll();
         return s;
     }
 
-//    public ResponseEntity<?> getNewest(){
-//
-//    }
-//    public ResponseEntity<?> getMostRead(){
-//
-//    }
+    public ResponseEntity<?> addCmt(CmtRequest cmtRequest){
+        Cmt cmt = Cmt.builder()
+                .id(cmtRequest.getId())
+                .noiDung(cmtRequest.getNoiDung())
+                .build();
+        cmtResponsi.save(cmt);
+        return new ResponseEntity<>("Thêm thành công!!!!!", HttpStatus.CREATED);
+    }
+    public ResponseEntity<?> getCmts(Long so) {
+        List<Cmt> cmts = cmtResponsi.findAllByIdIdSach(so);
+        return ResponseEntity.ok(cmts.stream().map(this::mapToCmtResponse).toList());
+    }
+
+    public CmtResponse mapToCmtResponse(Cmt cmt) {
+        return CmtResponse.builder()
+                .noiDung(cmt.getNoiDung())
+                .sachCmt(cmt.getSachCmt())
+                .id(cmt.getId())
+                .readerCmt(cmt.getReaderCmt())
+                .build();
+    }
+    public ResponseEntity<?> getRates(Long id) {
+        List<DanhGia> danhGias = danhGiaResponsi.findAllByIdIdSach(id);
+        return ResponseEntity.ok(danhGias.stream().map(this::mapToDanhGiaResponse).toList());
+    }
+
+    private DanhGIaResponse mapToDanhGiaResponse(DanhGia danhGia) {
+        return DanhGIaResponse.builder()
+                .point(danhGia.getPoint())
+                .sachRate(danhGia.getSachRate())
+                .id(danhGia.getId())
+                .readerRate(danhGia.getReaderRate())
+                .thoiGianTao(danhGia.getThoiGianTao())
+                .thoiGianCapNhat(danhGia.getThoiGianCapNhat())
+                .nhanXet(danhGia.getNhanXet())
+                .build();
+    }
+
 }

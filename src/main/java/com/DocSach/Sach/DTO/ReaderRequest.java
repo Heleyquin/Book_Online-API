@@ -1,8 +1,6 @@
 package com.DocSach.Sach.DTO;
 
-import com.DocSach.Sach.Entity.Account;
-import com.DocSach.Sach.Entity.LichSuDoc;
-import com.DocSach.Sach.Entity.Sach;
+import com.DocSach.Sach.Entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +20,8 @@ public class ReaderRequest {
     private boolean gioiTinh;
     private Set<LichSuDoc> lichSuDocs;
     private Set<Sach> sachs;
+    private Set<CT_Dang_Ky> ctGoiDangKys;
+    private Set<LichSuMua> ctLichSuMua;
+    private Set<Sach_Mong_Muon> ctSachMongMuon;
     private Account idAccount;
-//    private Set<Sach>
 }

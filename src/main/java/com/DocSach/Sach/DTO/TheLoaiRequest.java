@@ -1,5 +1,6 @@
 package com.DocSach.Sach.DTO;
 
+import com.DocSach.Sach.Entity.QuanLy;
 import com.DocSach.Sach.Entity.Sach;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,5 +16,4 @@ import java.util.Set;
 public class TheLoaiRequest {
     private String tenTL;
     private Set<Sach> sachs;
-
 }

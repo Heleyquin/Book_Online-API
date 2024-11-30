@@ -34,7 +34,4 @@ public class TheLoai {
     @JsonIgnore
     private Set<Sach> sachListTL = new HashSet<>();
 
-//    public TheLoai(Long id) {
-//        this.id = id;
-//    }
 }

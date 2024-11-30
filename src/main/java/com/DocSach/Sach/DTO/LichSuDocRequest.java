@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LichSuDocRequest {
-    private BigDecimal daTra;
     private Reader idReader;
     private Sach sach;
 }
