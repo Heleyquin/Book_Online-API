@@ -400,6 +400,9 @@ public class ReaderService {
     }
     public ResponseEntity<?> getRateByUserAndBook(Key_DanhGia keyDanhGia){
         DanhGia danhGia = danhGiaResponsi.findDanhGiaById(keyDanhGia);
+        if(danhGia == null){
+            return ResponseEntity.ok(null);
+        }
 //        Key_DanhGia keyDanhGia = new Key_DanhGia(danhGiaKey.getIdSach(), danhGiaKey.getId_DocGia());
         return ResponseEntity.ok(DanhGIaResponse.builder()
                 .id(keyDanhGia)

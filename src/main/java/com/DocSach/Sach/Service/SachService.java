@@ -320,6 +320,9 @@ public class SachService {
     }
     public ResponseEntity<?> getRates(Long id) {
         List<DanhGia> danhGias = danhGiaResponsi.findAllByIdIdSach(id);
+        if(danhGias.isEmpty()){
+            return ResponseEntity.ok(null);
+        }
         return ResponseEntity.ok(danhGias.stream().map(this::mapToDanhGiaResponse).toList());
     }
 
