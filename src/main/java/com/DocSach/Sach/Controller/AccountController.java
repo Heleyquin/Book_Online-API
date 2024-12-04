@@ -29,8 +29,26 @@ public class AccountController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(accountRequest.getTk(), accountRequest.getMk())
             );
-
-            if (authentication.isAuthenticated()) {
+            String role = authentication.getAuthorities().toString();
+            if (authentication.isAuthenticated() && role.equals("[ROLE_0]")) {
+                return accountService.generateToken(accountRequest.getTk());
+            } else {
+                return new ResponseEntity<>("Tên đăng nhập hoặc mật khẩu không đúng", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (AuthenticationException e) {
+            return new ResponseEntity<>("Tên đăng nhập hoặc mật khẩu không đúng", HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Đã xảy ra lỗi", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/login-reader")
+    public ResponseEntity<?> loginReader(@RequestBody AccountRequest accountRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(accountRequest.getTk(), accountRequest.getMk())
+            );
+            String role = authentication.getAuthorities().toString();
+            if (authentication.isAuthenticated() && role.equals("[ROLE_1]")) {
                 return accountService.generateToken(accountRequest.getTk());
             } else {
                 return new ResponseEntity<>("Tên đăng nhập hoặc mật khẩu không đúng", HttpStatus.UNAUTHORIZED);
