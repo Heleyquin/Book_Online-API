@@ -23,17 +23,18 @@ import java.util.*;
 public class RecommendService {
     private final SachResponsi sachResponsi;
 
-    @Value("${python.script.path}")
-    private String pythonScriptPath;
     private final RestTemplate restTemplate;
     private final BookMap bookMap = new BookMap();
-    public ResponseEntity<?> getRecommends(Long bookId) throws Exception {
-        Long index_book = bookMap.bookDict.get(bookId);
-        String url = "http://localhost:5000/recommendations?book_id=" + index_book;  // URL của server Python
+    public ResponseEntity<?> getRecommends(Long userId) throws Exception {
+        if(userId == null){
+            userId = 1L;
+        }
+        String url = "http://localhost:5000/recommendations?user_id=" + userId;  // URL của server Python
         ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, null, List.class);
 
         List<String> listIdBookString = response.getBody();
         List<Long> recommendations = new ArrayList<>();
+        assert listIdBookString != null;
         for(String s:listIdBookString){
             recommendations.add(Long.parseLong(s));
         }
